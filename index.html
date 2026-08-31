@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ela Tasks</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 80%;
+      margin: 50px auto;
+    }
+
+    h1 {
+      color: white;
+    }
+
+    input {
+      padding: 10px;
+      width: 300px;
+    }
+
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    li {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Ela Tasks</h1>
+
+    <input id="taskInput" type="text" placeholder="Enter task">
+    <button onclick="addTask()">Add Task</button>
+
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    const API = "http://18.61.234.18:3000";
+
+    async function loadTasks() {
+      const response = await fetch(`${API}/api/tasks`);
+      const tasks = await response.json();
+
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+
+      tasks.forEach(task => {
+        const li = document.createElement("li");
+        li.textContent = task.title;
+        list.appendChild(li);
+      });
+    }
+
+    async function addTask() {
+      const input = document.getElementById("taskInput");
+      const title = input.value;
+
+      if (!title) return;
+
+      await fetch(`${API}/api/tasks`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ title })
+      });
+
+      input.value = "";
+      loadTasks();
+    }
+
+    loadTasks();
+  </script>
+
+</body>
+</html>
