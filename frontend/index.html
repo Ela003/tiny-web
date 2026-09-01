@@ -1,222 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Ela Tasks</title>
+    <title>Ela Tasks</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f2f4f7;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .card {
-      width: 500px;
-      padding: 40px;
-      background: white;
-      border-radius: 16px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    }
-
-    h1 {
-      margin-bottom: 10px;
-      font-size: 36px;
-    }
-
-    .subtitle {
-      color: #666;
-      margin-bottom: 30px;
-    }
-
-    .input-area {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    input {
-      padding: 12px;
-      width: 300px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    button {
-      padding: 12px 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover {
-      opacity: 0.8;
-    }
-
-    #taskList {
-      text-align: left;
-      margin-top: 30px;
-      padding-left: 20px;
-    }
-
-    #taskList li {
-      margin: 12px 0;
-    }
-
-    .status {
-      margin-top: 20px;
-      color: #666;
-    }
-  </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="card">
+    <div class="container">
 
-    <h1>Ela Tasks</h1>
+        <div class="card">
 
-    <p class="subtitle">
-      My first feature running on AWS VPS
-    </p>
+            <h1>Ela Tasks</h1>
 
-    <div class="input-area">
-      <input
-        id="taskInput"
-        type="text"
-        placeholder="Enter task"
-      >
+            <p class="subtitle">
+                My first feature running on AWS VPS
+            </p>
 
-      <button onclick="addTask()">
-        Add Task
-      </button>
+            <!-- Add Task -->
+            <div class="input-area">
+
+                <input
+                    id="taskInput"
+                    type="text"
+                    placeholder="Enter task"
+                >
+
+                <button
+                    class="add-btn"
+                    onclick="addTask()">
+                    Add Task
+                </button>
+
+            </div>
+
+            <h2>My Tasks</h2>
+
+            <!-- Tasks will appear here -->
+            <ul id="taskList"></ul>
+
+            <p id="status" class="status">
+                Loading tasks...
+            </p>
+
+        </div>
+
     </div>
 
-    <ul id="taskList"></ul>
-
-    <p class="status" id="status">
-      Loading tasks...
-    </p>
-
-  </div>
-
-
-  <script>
-
-    const API = "http://18.61.234.18:3000";
-
-
-    // GET tasks from PostgreSQL
-    async function loadTasks() {
-
-      try {
-
-        const response = await fetch(`${API}/api/tasks`);
-
-        const tasks = await response.json();
-
-        const list = document.getElementById("taskList");
-
-        list.innerHTML = "";
-
-        tasks.forEach(task => {
-
-          const li = document.createElement("li");
-
-          li.textContent = task.title;
-
-          list.appendChild(li);
-
-        });
-
-        document.getElementById("status").textContent =
-          `${tasks.length} task(s)`;
-
-      } catch (error) {
-
-        console.error(error);
-
-        document.getElementById("status").textContent =
-          "Unable to connect to server";
-
-      }
-    }
-
-
-    // POST new task to PostgreSQL
-    async function addTask() {
-
-      const input = document.getElementById("taskInput");
-
-      const title = input.value.trim();
-
-      if (!title) {
-        return;
-      }
-
-      try {
-
-        const response = await fetch(`${API}/api/tasks`, {
-
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            title: title
-          })
-
-        });
-
-
-        const task = await response.json();
-
-
-        if (!response.ok) {
-
-          console.error(task);
-
-          document.getElementById("status").textContent =
-            "Failed to add task";
-
-          return;
-        }
-
-
-        input.value = "";
-
-        await loadTasks();
-
-      } catch (error) {
-
-        console.error(error);
-
-        document.getElementById("status").textContent =
-          "Unable to connect to server";
-
-      }
-    }
-
-
-    // Load tasks when page opens
-    loadTasks();
-
-  </script>
+    <script src="script.js"></script>
 
 </body>
 </html>
