@@ -1,133 +1,79 @@
-* {
-    box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="en">
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f2f4f7;
+<head>
 
-    min-height: 100vh;
+    <meta charset="UTF-8">
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-.card {
-    width: 550px;
+    <title>Ela Tasks</title>
 
-    padding: 40px;
+    <link rel="stylesheet" href="style.css">
 
-    background: white;
+</head>
 
-    border-radius: 16px;
 
-    text-align: center;
+<body>
 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-}
+    <div class="container">
 
-h1 {
-    margin-bottom: 10px;
-    font-size: 36px;
-}
+        <div class="card">
 
-.subtitle {
-    color: #666;
-    margin-bottom: 30px;
-}
+            <h1>Ela Tasks</h1>
 
-.input-area {
-    display: flex;
-    gap: 10px;
-}
+            <p class="subtitle">
+                My first feature running on AWS VPS
+            </p>
 
-input {
-    flex: 1;
 
-    padding: 12px;
+            <!-- ADD TASK -->
 
-    border: 1px solid #ccc;
+            <div class="input-area">
 
-    border-radius: 8px;
+                <input
+                    id="taskInput"
+                    type="text"
+                    placeholder="Enter your task"
+                >
 
-    font-size: 16px;
-}
+                <button
+                    class="add-btn"
+                    onclick="addTask()"
+                >
+                    Add Task
+                </button>
 
-button {
-    padding: 10px 16px;
+            </div>
 
-    border: none;
 
-    border-radius: 8px;
+            <!-- TASKS -->
 
-    cursor: pointer;
+            <div class="tasks-container">
 
-    font-size: 14px;
-}
+                <h2>My Tasks</h2>
 
-button:hover {
-    opacity: 0.8;
-}
+                <ul id="taskList"></ul>
 
-#addBtn {
-    background: #222;
-    color: white;
-}
+            </div>
 
-#taskList {
-    list-style: none;
 
-    padding: 0;
+            <!-- STATUS -->
 
-    margin-top: 30px;
+            <p id="status" class="status">
+                Loading tasks...
+            </p>
 
-    text-align: left;
-}
+        </div>
 
-.task-item {
-    display: flex;
+    </div>
 
-    align-items: center;
 
-    justify-content: space-between;
+    <script src="script.js"></script>
 
-    gap: 10px;
+</body>
 
-    padding: 12px;
-
-    margin-bottom: 10px;
-
-    background: #f5f5f5;
-
-    border-radius: 8px;
-}
-
-.task-title {
-    flex: 1;
-
-    word-break: break-word;
-}
-
-.actions {
-    display: flex;
-
-    gap: 6px;
-}
-
-.update-btn {
-    background: #1976d2;
-    color: white;
-}
-
-.delete-btn {
-    background: #d32f2f;
-    color: white;
-}
-
-.status {
-    margin-top: 20px;
-
-    color: #666;
-}
+</html>

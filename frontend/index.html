@@ -1,47 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Ela Tasks</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-    <div class="card">
+    <div class="container">
 
-        <h1>Ela Tasks</h1>
+        <div class="card">
 
-        <p class="subtitle">
-            My first feature running on AWS VPS
-        </p>
+            <h1>Ela Tasks</h1>
 
-        <div class="input-area">
+            <p class="subtitle">
+                My first feature running on AWS VPS
+            </p>
 
-            <input
-                id="taskInput"
-                type="text"
-                placeholder="Enter task"
-            >
 
-            <button id="addBtn" onclick="addTask()">
-                Add Task
-            </button>
+            <!-- ADD TASK -->
+
+            <div class="input-area">
+
+                <input
+                    id="taskInput"
+                    type="text"
+                    placeholder="Enter your task"
+                >
+
+                <button
+                    class="add-btn"
+                    onclick="addTask()"
+                >
+                    Add Task
+                </button>
+
+            </div>
+
+
+            <!-- TASKS -->
+
+            <div class="tasks-container">
+
+                <h2>My Tasks</h2>
+
+                <ul id="taskList"></ul>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <p id="status" class="status">
+                Loading tasks...
+            </p>
 
         </div>
 
-        <ul id="taskList"></ul>
-
-        <p class="status" id="status">
-            Loading tasks...
-        </p>
-
     </div>
+
 
     <script src="script.js"></script>
 
 </body>
+
 </html>

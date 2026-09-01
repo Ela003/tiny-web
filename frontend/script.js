@@ -1,61 +1,170 @@
+// ========================================
+// API
+// ========================================
+
 const API = "http://18.61.234.18:3000";
 
 
-// ==============================
-// LOAD TASKS
-// ==============================
+// ========================================
+// GET TASKS
+// ========================================
 
 async function loadTasks() {
 
     try {
 
-        const response = await fetch(`${API}/api/tasks`);
+        const response =
+            await fetch(`${API}/api/tasks`);
+
 
         if (!response.ok) {
-            throw new Error("Failed to load tasks");
+
+            throw new Error(
+                "Failed to load tasks"
+            );
+
         }
 
-        const tasks = await response.json();
 
-        const list = document.getElementById("taskList");
+        const tasks =
+            await response.json();
+
+
+        const list =
+            document.getElementById(
+                "taskList"
+            );
+
 
         list.innerHTML = "";
 
+
+        // No tasks
+
+        if (tasks.length === 0) {
+
+            list.innerHTML = `
+                <li class="empty">
+                    No tasks yet
+                </li>
+            `;
+
+        }
+
+
+        // Display tasks
+
         tasks.forEach(task => {
 
-            const li = document.createElement("li");
+            const li =
+                document.createElement("li");
+
 
             li.className = "task-item";
 
-            li.innerHTML = `
-                <span class="task-title">
-                    ${escapeHTML(task.title)}
-                </span>
 
-                <div class="actions">
+            // Task title
 
-                    <button
-                        class="update-btn"
-                        onclick="updateTask(${task.id}, '${escapeHTML(task.title)}')"
-                    >
-                        Update
-                    </button>
+            const title =
+                document.createElement("span");
 
-                    <button
-                        class="delete-btn"
-                        onclick="deleteTask(${task.id})"
-                    >
-                        Delete
-                    </button>
 
-                </div>
-            `;
+            title.className =
+                "task-title";
+
+
+            title.textContent =
+                task.title;
+
+
+            // Buttons container
+
+            const actions =
+                document.createElement("div");
+
+
+            actions.className =
+                "task-actions";
+
+
+            // UPDATE BUTTON
+
+            const updateButton =
+                document.createElement("button");
+
+
+            updateButton.className =
+                "update-btn";
+
+
+            updateButton.textContent =
+                "Update";
+
+
+            updateButton.onclick =
+                function () {
+
+                    updateTask(
+                        task.id,
+                        task.title
+                    );
+
+                };
+
+
+            // DELETE BUTTON
+
+            const deleteButton =
+                document.createElement("button");
+
+
+            deleteButton.className =
+                "delete-btn";
+
+
+            deleteButton.textContent =
+                "Delete";
+
+
+            deleteButton.onclick =
+                function () {
+
+                    deleteTask(
+                        task.id
+                    );
+
+                };
+
+
+            // Add buttons
+
+            actions.appendChild(
+                updateButton
+            );
+
+
+            actions.appendChild(
+                deleteButton
+            );
+
+
+            // Add title + buttons
+
+            li.appendChild(title);
+
+            li.appendChild(actions);
+
+
+            // Add task to list
 
             list.appendChild(li);
 
         });
 
-        document.getElementById("status").textContent =
+
+        document.getElementById(
+            "status"
+        ).textContent =
             `${tasks.length} task(s)`;
 
 
@@ -63,64 +172,91 @@ async function loadTasks() {
 
         console.error(error);
 
-        document.getElementById("status").textContent =
+
+        document.getElementById(
+            "status"
+        ).textContent =
             "Unable to connect to server";
 
     }
+
 }
 
 
 
-// ==============================
+// ========================================
 // ADD TASK
-// ==============================
+// ========================================
 
 async function addTask() {
 
-    const input = document.getElementById("taskInput");
+    const input =
+        document.getElementById(
+            "taskInput"
+        );
 
-    const title = input.value.trim();
+
+    const title =
+        input.value.trim();
+
 
     if (!title) {
 
-        alert("Please enter a task");
+        alert(
+            "Please enter a task"
+        );
 
         return;
+
     }
 
 
     try {
 
-        const response = await fetch(`${API}/api/tasks`, {
+        const response =
+            await fetch(
+                `${API}/api/tasks`,
+                {
 
-            method: "POST",
+                    method: "POST",
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-            body: JSON.stringify({
-                title: title
-            })
+                    body: JSON.stringify({
+                        title: title
+                    })
 
-        });
+                }
+            );
 
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
 
         if (!response.ok) {
 
             console.error(result);
 
-            alert("Failed to add task");
+            alert(
+                "Failed to add task"
+            );
 
             return;
+
         }
 
+
+        // Clear input
 
         input.value = "";
 
+
+        // Reload tasks
+
         await loadTasks();
 
 
@@ -128,7 +264,9 @@ async function addTask() {
 
         console.error(error);
 
-        alert("Unable to connect to server");
+        alert(
+            "Unable to connect to server"
+        );
 
     }
 
@@ -136,64 +274,82 @@ async function addTask() {
 
 
 
-// ==============================
+// ========================================
 // UPDATE TASK
-// ==============================
+// ========================================
 
-async function updateTask(id, oldTitle) {
+async function updateTask(
+    id,
+    oldTitle
+) {
 
-    const newTitle = prompt(
-        "Enter new task name:",
-        oldTitle
-    );
+    const newTitle =
+        prompt(
+            "Enter new task:",
+            oldTitle
+        );
 
+
+    // User cancelled
 
     if (newTitle === null) {
+
         return;
+
     }
 
 
-    const title = newTitle.trim();
+    const title =
+        newTitle.trim();
 
 
     if (!title) {
 
-        alert("Task cannot be empty");
+        alert(
+            "Task cannot be empty"
+        );
 
         return;
+
     }
 
 
     try {
 
-        const response = await fetch(
-            `${API}/api/tasks/${id}`,
-            {
+        const response =
+            await fetch(
+                `${API}/api/tasks/${id}`,
+                {
 
-                method: "PUT",
+                    method: "PUT",
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body: JSON.stringify({
-                    title: title
-                })
+                    body: JSON.stringify({
+                        title: title
+                    })
 
-            }
-        );
+                }
+            );
 
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
 
         if (!response.ok) {
 
             console.error(result);
 
-            alert("Failed to update task");
+            alert(
+                "Failed to update task"
+            );
 
             return;
+
         }
 
 
@@ -204,7 +360,9 @@ async function updateTask(id, oldTitle) {
 
         console.error(error);
 
-        alert("Unable to connect to server");
+        alert(
+            "Unable to connect to server"
+        );
 
     }
 
@@ -212,44 +370,56 @@ async function updateTask(id, oldTitle) {
 
 
 
-// ==============================
+// ========================================
 // DELETE TASK
-// ==============================
+// ========================================
 
 async function deleteTask(id) {
 
-    const confirmDelete = confirm(
-        "Are you sure you want to delete this task?"
-    );
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this task?"
+        );
 
 
-    if (!confirmDelete) {
+    if (!confirmed) {
+
         return;
+
     }
 
 
     try {
 
-        const response = await fetch(
-            `${API}/api/tasks/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
+        const response =
+            await fetch(
+                `${API}/api/tasks/${id}`,
+                {
+
+                    method: "DELETE"
+
+                }
+            );
 
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
 
         if (!response.ok) {
 
             console.error(result);
 
-            alert("Failed to delete task");
+            alert(
+                "Failed to delete task"
+            );
 
             return;
+
         }
 
+
+        // Reload database data
 
         await loadTasks();
 
@@ -258,7 +428,9 @@ async function deleteTask(id) {
 
         console.error(error);
 
-        alert("Unable to connect to server");
+        alert(
+            "Unable to connect to server"
+        );
 
     }
 
@@ -266,24 +438,8 @@ async function deleteTask(id) {
 
 
 
-// ==============================
-// SECURITY HELPER
-// ==============================
-
-function escapeHTML(text) {
-
-    const div = document.createElement("div");
-
-    div.textContent = text;
-
-    return div.innerHTML;
-
-}
-
-
-
-// ==============================
+// ========================================
 // LOAD WHEN PAGE OPENS
-// ==============================
+// ========================================
 
 loadTasks();
