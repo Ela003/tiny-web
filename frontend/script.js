@@ -1,4 +1,4 @@
-const API = "https://task.ela.kazhugu.cloud/";
+const API = "http://18.61.234.18:3000"
 
 // ===============================
 // LOAD ALL TASKS
