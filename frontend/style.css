@@ -1,79 +1,291 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Ela Tasks</title>
-
-    <link rel="stylesheet" href="style.css">
-
-</head>
+* {
+    box-sizing: border-box;
+}
 
 
-<body>
+body {
+    margin: 0;
 
-    <div class="container">
+    font-family: Arial, sans-serif;
 
-        <div class="card">
+    background: #000;
 
-            <h1>Ela Tasks</h1>
+    color: #fff;
 
-            <p class="subtitle">
-                My first feature running on AWS VPS
-            </p>
-
-
-            <!-- ADD TASK -->
-
-            <div class="input-area">
-
-                <input
-                    id="taskInput"
-                    type="text"
-                    placeholder="Enter your task"
-                >
-
-                <button
-                    class="add-btn"
-                    onclick="addTask()"
-                >
-                    Add Task
-                </button>
-
-            </div>
+    min-height: 100vh;
+}
 
 
-            <!-- TASKS -->
+/* Center everything */
 
-            <div class="tasks-container">
+.container {
+    min-height: 100vh;
 
-                <h2>My Tasks</h2>
+    display: flex;
 
-                <ul id="taskList"></ul>
+    justify-content: center;
 
-            </div>
+    align-items: center;
 
-
-            <!-- STATUS -->
-
-            <p id="status" class="status">
-                Loading tasks...
-            </p>
-
-        </div>
-
-    </div>
+    padding: 20px;
+}
 
 
-    <script src="script.js"></script>
+/* Main card */
 
-</body>
+.card {
+    width: 100%;
 
-</html>
+    max-width: 600px;
+
+    padding: 40px;
+
+    background: #111;
+
+    border: 1px solid #333;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 40px rgba(255, 255, 255, 0.08);
+}
+
+
+/* Heading */
+
+h1 {
+    margin: 0;
+
+    text-align: center;
+
+    font-size: 36px;
+}
+
+
+.subtitle {
+    text-align: center;
+
+    color: #999;
+
+    margin-top: 10px;
+
+    margin-bottom: 30px;
+}
+
+
+/* Input */
+
+.input-area {
+    display: flex;
+
+    gap: 10px;
+
+    width: 100%;
+}
+
+
+input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 13px;
+
+    font-size: 16px;
+
+    color: white;
+
+    background: #222;
+
+    border: 1px solid #444;
+
+    border-radius: 8px;
+
+    outline: none;
+}
+
+
+input:focus {
+    border-color: white;
+}
+
+
+input::placeholder {
+    color: #777;
+}
+
+
+/* All buttons */
+
+button {
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 11px 16px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+
+button:hover {
+    opacity: 0.8;
+}
+
+
+/* Add button */
+
+.add-btn {
+    background: white;
+
+    color: black;
+}
+
+
+/* Task list */
+
+#taskList {
+    list-style: none;
+
+    padding: 0;
+
+    margin: 30px 0 0;
+}
+
+
+/* Single task */
+
+.task-item {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 14px;
+
+    margin-bottom: 12px;
+
+    background: #1c1c1c;
+
+    border: 1px solid #333;
+
+    border-radius: 10px;
+}
+
+
+/* Task title */
+
+.task-title {
+    flex: 1;
+
+    color: white;
+
+    word-break: break-word;
+}
+
+
+/* Buttons area */
+
+.task-actions {
+    display: flex;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+}
+
+
+/* Update */
+
+.update-btn {
+    background: white;
+
+    color: black;
+}
+
+
+/* Delete */
+
+.delete-btn {
+    background: #dc3545;
+
+    color: white;
+}
+
+
+/* Status */
+
+.status {
+    text-align: center;
+
+    color: #888;
+
+    margin-top: 20px;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 600px) {
+
+    .container {
+        padding: 15px;
+    }
+
+
+    .card {
+        padding: 25px 18px;
+    }
+
+
+    h1 {
+        font-size: 30px;
+    }
+
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+
+    .input-area {
+        flex-direction: column;
+    }
+
+
+    input {
+        width: 100%;
+    }
+
+
+    .add-btn {
+        width: 100%;
+    }
+
+
+    .task-item {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .task-actions {
+        width: 100%;
+    }
+
+
+    .task-actions button {
+        flex: 1;
+    }
+
+}
