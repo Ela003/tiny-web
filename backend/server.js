@@ -45,3 +45,33 @@ app.post("/api/tasks", async (req, res) => {
 app.listen(3000, "0.0.0.0", () => {
   console.log("API running on port 3000");
 });
+
+// DELETE task
+app.delete("/api/tasks/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      "DELETE FROM tasks WHERE id = $1 RETURNING *",
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Task not found"
+      });
+    }
+
+    res.json({
+      message: "Task deleted successfully",
+      task: result.rows[0]
+    });
+
+  } catch (error) {
+    console.error("Delete error:", error);
+
+    res.status(500).json({
+      error: "Failed to delete task"
+    });
+  }
+});
