@@ -7,6 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// PostgreSQL connection
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
@@ -15,6 +16,10 @@ const pool = new Pool({
   port: 5432,
 });
 
+
+// ===============================
+// GET ALL TASKS
+// ===============================
 app.get("/api/tasks", async (req, res) => {
   try {
     const result = await pool.query(
@@ -22,34 +27,55 @@ app.get("/api/tasks", async (req, res) => {
     );
 
     res.json(result.rows);
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("GET error:", error);
+
+    res.status(500).json({
+      error: "Failed to get tasks"
+    });
   }
 });
 
+
+// ===============================
+// ADD TASK
+// ===============================
 app.post("/api/tasks", async (req, res) => {
   try {
     const { title } = req.body;
 
+    if (!title || !title.trim()) {
+      return res.status(400).json({
+        error: "Task title is required"
+      });
+    }
+
     const result = await pool.query(
       "INSERT INTO tasks (title) VALUES ($1) RETURNING *",
-      [title]
+      [title.trim()]
     );
 
-    res.json(result.rows[0]);
+    res.status(201).json(result.rows[0]);
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("POST error:", error);
+
+    res.status(500).json({
+      error: "Failed to add task"
+    });
   }
 });
 
-app.listen(3000, "0.0.0.0", () => {
-  console.log("API running on port 3000");
-});
 
-// DELETE task
+// ===============================
+// DELETE TASK
+// ===============================
 app.delete("/api/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
+
+    console.log("Deleting task ID:", id);
 
     const result = await pool.query(
       "DELETE FROM tasks WHERE id = $1 RETURNING *",
@@ -62,16 +88,68 @@ app.delete("/api/tasks/:id", async (req, res) => {
       });
     }
 
+    console.log("Deleted task:", result.rows[0]);
+
     res.json({
       message: "Task deleted successfully",
       task: result.rows[0]
     });
 
   } catch (error) {
-    console.error("Delete error:", error);
+    console.error("DELETE error:", error);
 
     res.status(500).json({
       error: "Failed to delete task"
     });
   }
+});
+
+
+// ===============================
+// UPDATE TASK
+// ===============================
+app.put("/api/tasks/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title } = req.body;
+
+    console.log("Updating task ID:", id);
+    console.log("New title:", title);
+
+    if (!title || !title.trim()) {
+      return res.status(400).json({
+        error: "Task title is required"
+      });
+    }
+
+    const result = await pool.query(
+      "UPDATE tasks SET title = $1 WHERE id = $2 RETURNING *",
+      [title.trim(), id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Task not found"
+      });
+    }
+
+    console.log("Updated task:", result.rows[0]);
+
+    res.json(result.rows[0]);
+
+  } catch (error) {
+    console.error("PUT error:", error);
+
+    res.status(500).json({
+      error: "Failed to update task"
+    });
+  }
+});
+
+
+// ===============================
+// START SERVER
+// ===============================
+app.listen(3000, "0.0.0.0", () => {
+  console.log("API running on port 3000");
 });
