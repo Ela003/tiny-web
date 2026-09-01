@@ -1,4 +1,4 @@
-const API = "https://task.ela.kazhugu.cloud";
+const API = "https://task.ela.kazhugu.cloud/";
 
 // ===============================
 // LOAD ALL TASKS
